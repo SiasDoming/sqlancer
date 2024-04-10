@@ -34,30 +34,30 @@ public class PostgresGlobalState extends SQLGlobalState<PostgresOptions, Postgre
         try {
             this.opClasses = getOpclasses(getConnection());
             this.operators = getOperators(getConnection());
-            this.collates = getCollnames(getConnection());
-            this.tableAccessMethods = getTableAccessMethods(getConnection());
+            // this.collates = getCollnames(getConnection());
+            // this.tableAccessMethods = getTableAccessMethods(getConnection());
         } catch (SQLException e) {
             throw new AssertionError(e);
         }
     }
 
-    private List<String> getCollnames(SQLConnection con) throws SQLException {
-        List<String> collNames = new ArrayList<>();
-        try (Statement s = con.createStatement()) {
-            try (ResultSet rs = s
-                    .executeQuery("SELECT collname FROM pg_collation WHERE collname LIKE '%utf8' or collname = 'C';")) {
-                while (rs.next()) {
-                    collNames.add(rs.getString(1));
-                }
-            }
-        }
-        return collNames;
-    }
+    // private List<String> getCollnames(SQLConnection con) throws SQLException {
+    // List<String> collNames = new ArrayList<>();
+    // try (Statement s = con.createStatement()) {
+    // try (ResultSet rs = s
+    // .executeQuery("SELECT collname FROM pg_collation WHERE collname LIKE '%utf8' or collname = 'C';")) {
+    // while (rs.next()) {
+    // collNames.add(rs.getString(1));
+    // }
+    // }
+    // }
+    // return collNames;
+    // }
 
     private List<String> getOpclasses(SQLConnection con) throws SQLException {
         List<String> opClasses = new ArrayList<>();
         try (Statement s = con.createStatement()) {
-            try (ResultSet rs = s.executeQuery("select opcname FROM pg_opclass;")) {
+            try (ResultSet rs = s.executeQuery("SELECT opcname FROM pg_opclass;")) {
                 while (rs.next()) {
                     opClasses.add(rs.getString(1));
                 }
@@ -78,20 +78,20 @@ public class PostgresGlobalState extends SQLGlobalState<PostgresOptions, Postgre
         return operators;
     }
 
-    private List<String> getTableAccessMethods(SQLConnection con) throws SQLException {
-        List<String> tableAccessMethods = new ArrayList<>();
-        try (Statement s = con.createStatement()) {
-            /*
-             * pg_am includes both index and table access methods so we need to filter with amtype = 't'
-             */
-            try (ResultSet rs = s.executeQuery("SELECT amname FROM pg_am WHERE amtype = 't';")) {
-                while (rs.next()) {
-                    tableAccessMethods.add(rs.getString(1));
-                }
-            }
-        }
-        return tableAccessMethods;
-    }
+    // private List<String> getTableAccessMethods(SQLConnection con) throws SQLException {
+    // List<String> tableAccessMethods = new ArrayList<>();
+    // try (Statement s = con.createStatement()) {
+    // /*
+    // * pg_am includes both index and table access methods so we need to filter with amtype = 't'
+    // */
+    // try (ResultSet rs = s.executeQuery("SELECT amname FROM pg_am WHERE amtype = 't';")) {
+    // while (rs.next()) {
+    // tableAccessMethods.add(rs.getString(1));
+    // }
+    // }
+    // }
+    // return tableAccessMethods;
+    // }
 
     public List<String> getOperators() {
         return operators;

@@ -31,11 +31,12 @@ public enum PostgresFunctionWithUnknownResult {
     INET_CLIENT_PORT("inet_client_port", PostgresDataType.INT),
     // INET_SERVER_PORT("inet_server_port", PostgresDataType.INT),
     PG_BACKEND_PID("pg_backend_pid", PostgresDataType.INT),
-    PG_CURRENT_LOGFILE("pg_current_logfile", PostgresDataType.TEXT),
-    PG_IS_OTHER_TEMP_SCHEMA("pg_is_other_temp_schema", PostgresDataType.BOOLEAN),
-    PG_JIT_AVAILABLE("pg_jit_available", PostgresDataType.BOOLEAN),
-    PG_NOTIFICATION_QUEUE_USAGE("pg_notification_queue_usage", PostgresDataType.REAL),
-    PG_TRIGGER_DEPTH("pg_trigger_depth", PostgresDataType.INT), VERSION("version", PostgresDataType.TEXT),
+    // PG_CURRENT_LOGFILE("pg_current_logfile", PostgresDataType.TEXT),
+    // PG_IS_OTHER_TEMP_SCHEMA("pg_is_other_temp_schema", PostgresDataType.BOOLEAN),
+    // PG_JIT_AVAILABLE("pg_jit_available", PostgresDataType.BOOLEAN),
+    // PG_NOTIFICATION_QUEUE_USAGE("pg_notification_queue_usage", PostgresDataType.REAL),
+    // PG_TRIGGER_DEPTH("pg_trigger_depth", PostgresDataType.INT),
+    VERSION("version", PostgresDataType.TEXT),
 
     //
     TO_CHAR("to_char", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT) {
@@ -72,19 +73,20 @@ public enum PostgresFunctionWithUnknownResult {
     // PG_CLIENT_ENCODING("pg_client_encoding", PostgresDataType.TEXT),
     QUOTE_LITERAL("quote_literal", PostgresDataType.TEXT, PostgresDataType.TEXT),
     QUOTE_IDENT("quote_ident", PostgresDataType.TEXT, PostgresDataType.TEXT),
-    REGEX_REPLACE("regex_replace", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT),
+    REGEX_REPLACE("regex_replace", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT,
+            PostgresDataType.TEXT),
     // REPEAT("repeat", PostgresDataType.TEXT, PostgresDataType.TEXT,
     // PostgresDataType.INT),
-    REPLACE("replace", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT),
+    REPLACE("replace", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT),
     REVERSE("reverse", PostgresDataType.TEXT, PostgresDataType.TEXT),
     RIGHT("right", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.INT),
     RPAD("rpad", PostgresDataType.TEXT, PostgresDataType.INT, PostgresDataType.TEXT),
     RTRIM("rtrim", PostgresDataType.TEXT, PostgresDataType.TEXT),
-    SPLIT_PART("split_part", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.INT),
+    SPLIT_PART("split_part", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.INT),
     STRPOS("strpos", PostgresDataType.INT, PostgresDataType.TEXT, PostgresDataType.TEXT),
     SUBSTR("substr", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.INT, PostgresDataType.INT),
-    TO_ASCII("to_ascii", PostgresDataType.TEXT, PostgresDataType.TEXT),
-    TO_HEX("to_hex", PostgresDataType.INT, PostgresDataType.TEXT),
+    // TO_ASCII("to_ascii", PostgresDataType.TEXT, PostgresDataType.TEXT),
+    TO_HEX("to_hex", PostgresDataType.TEXT, PostgresDataType.INT),
     TRANSLATE("translate", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT),
     // mathematical functions
     // https://www.postgresql.org/docs/9.5/functions-math.html
@@ -126,19 +128,19 @@ public enum PostgresFunctionWithUnknownResult {
     ATANH("atanh", PostgresDataType.REAL), //
 
     // https://www.postgresql.org/docs/devel/functions-binarystring.html
-    GET_BIT("get_bit", PostgresDataType.INT, PostgresDataType.TEXT, PostgresDataType.INT),
-    GET_BYTE("get_byte", PostgresDataType.INT, PostgresDataType.TEXT, PostgresDataType.INT),
+    // GET_BIT("get_bit", PostgresDataType.INT, PostgresDataType.TEXT, PostgresDataType.INT),
+    // GET_BYTE("get_byte", PostgresDataType.INT, PostgresDataType.TEXT, PostgresDataType.INT),
 
     // range functions
     // https://www.postgresql.org/docs/devel/functions-range.html#RANGE-FUNCTIONS-TABLE
-    RANGE_LOWER("lower", PostgresDataType.INT, PostgresDataType.RANGE), //
-    RANGE_UPPER("upper", PostgresDataType.INT, PostgresDataType.RANGE), //
-    RANGE_ISEMPTY("isempty", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
-    RANGE_LOWER_INC("lower_inc", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
-    RANGE_UPPER_INC("upper_inc", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
-    RANGE_LOWER_INF("lower_inf", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
-    RANGE_UPPER_INF("upper_inf", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
-    RANGE_MERGE("range_merge", PostgresDataType.RANGE, PostgresDataType.RANGE, PostgresDataType.RANGE), //
+    // RANGE_LOWER("lower", PostgresDataType.INT, PostgresDataType.RANGE), //
+    // RANGE_UPPER("upper", PostgresDataType.INT, PostgresDataType.RANGE), //
+    // RANGE_ISEMPTY("isempty", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
+    // RANGE_LOWER_INC("lower_inc", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
+    // RANGE_UPPER_INC("upper_inc", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
+    // RANGE_LOWER_INF("lower_inf", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
+    // RANGE_UPPER_INF("upper_inf", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
+    // RANGE_MERGE("range_merge", PostgresDataType.RANGE, PostgresDataType.RANGE, PostgresDataType.RANGE), //
 
     // https://www.postgresql.org/docs/devel/functions-admin.html#FUNCTIONS-ADMIN-DBSIZE
     GET_COLUMN_SIZE("get_column_size", PostgresDataType.INT, PostgresDataType.TEXT);

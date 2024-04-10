@@ -19,13 +19,13 @@ public final class PostgresSequenceGenerator {
         }
         sb.append(" SEQUENCE");
         // TODO keep track of sequences
-        sb.append(" IF NOT EXISTS");
+        // sb.append(" IF NOT EXISTS");
         // TODO generate sequence names
         sb.append(" seq");
-        if (Randomly.getBoolean()) {
-            sb.append(" AS ");
-            sb.append(Randomly.fromOptions("smallint", "integer", "bigint"));
-        }
+        // if (Randomly.getBoolean()) {
+        // sb.append(" AS ");
+        // sb.append(Randomly.fromOptions("smallint", "integer", "bigint"));
+        // }
         if (Randomly.getBoolean()) {
             sb.append(" INCREMENT");
             if (Randomly.getBoolean()) {

@@ -16,24 +16,24 @@ public final class PostgresViewGenerator {
     public static SQLQueryAdapter create(PostgresGlobalState globalState) {
         ExpectedErrors errors = new ExpectedErrors();
         StringBuilder sb = new StringBuilder("CREATE");
-        boolean materialized;
-        boolean recursive = false;
+        // boolean materialized;
+        // boolean recursive = false;
+        // if (Randomly.getBoolean()) {
+        // sb.append(" MATERIALIZED");
+        // materialized = true;
+        // } else {
         if (Randomly.getBoolean()) {
-            sb.append(" MATERIALIZED");
-            materialized = true;
-        } else {
-            if (Randomly.getBoolean()) {
-                sb.append(" OR REPLACE");
-            }
-            if (Randomly.getBoolean()) {
-                sb.append(Randomly.fromOptions(" TEMP", " TEMPORARY"));
-            }
-            if (Randomly.getBoolean()) {
-                sb.append(" RECURSIVE");
-                recursive = true;
-            }
-            materialized = false;
+            sb.append(" OR REPLACE");
         }
+        if (Randomly.getBoolean()) {
+            sb.append(Randomly.fromOptions(" TEMP", " TEMPORARY"));
+        }
+        // if (Randomly.getBoolean()) {
+        // sb.append(" RECURSIVE");
+        // recursive = true;
+        // }
+        // materialized = false;
+        // }
         sb.append(" VIEW ");
         int i = 0;
         String[] name = new String[1];
@@ -67,12 +67,12 @@ public final class PostgresViewGenerator {
         PostgresSelect select = PostgresRandomQueryGenerator.createRandomQuery(nrColumns, globalState);
         sb.append(PostgresVisitor.asString(select));
         sb.append(")");
-        if (Randomly.getBoolean() && !materialized && !recursive) {
-            sb.append(" WITH ");
-            sb.append(Randomly.fromOptions("CASCADED", "LOCAL"));
-            sb.append(" CHECK OPTION");
-            errors.add("WITH CHECK OPTION is supported only on automatically updatable views");
-        }
+        // if (Randomly.getBoolean() && !materialized && !recursive) {
+        // sb.append(" WITH ");
+        // sb.append(Randomly.fromOptions("CASCADED", "LOCAL"));
+        // sb.append(" CHECK OPTION");
+        // errors.add("WITH CHECK OPTION is supported only on automatically updatable views");
+        // }
         PostgresCommon.addGroupingErrors(errors);
         errors.add("already exists");
         errors.add("cannot drop columns from view");

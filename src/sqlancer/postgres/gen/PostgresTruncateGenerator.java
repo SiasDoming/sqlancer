@@ -25,10 +25,10 @@ public final class PostgresTruncateGenerator {
         sb.append(" ");
         sb.append(globalState.getSchema().getDatabaseTablesRandomSubsetNotEmpty().stream().map(t -> t.getName())
                 .collect(Collectors.joining(", ")));
-        if (Randomly.getBoolean()) {
-            sb.append(" ");
-            sb.append(Randomly.fromOptions("RESTART IDENTITY", "CONTINUE IDENTITY"));
-        }
+        // if (Randomly.getBoolean()) {
+        // sb.append(" ");
+        // sb.append(Randomly.fromOptions("RESTART IDENTITY", "CONTINUE IDENTITY"));
+        // }
         if (Randomly.getBoolean()) {
             sb.append(" ");
             sb.append(Randomly.fromOptions("CASCADE", "RESTRICT"));

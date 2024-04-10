@@ -6,6 +6,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,10 @@ public class PostgresSchema extends AbstractSchema<PostgresGlobalState, Postgres
                 dataTypes.remove(PostgresDataType.MONEY);
                 dataTypes.remove(PostgresDataType.BIT);
             }
+            dataTypes.remove(PostgresDataType.RANGE);
+            dataTypes.remove(PostgresDataType.MONEY);
+            dataTypes.remove(PostgresDataType.BIT);
+            dataTypes.remove(PostgresDataType.INET);
             return Randomly.fromList(dataTypes);
         }
     }
@@ -255,15 +260,16 @@ public class PostgresSchema extends AbstractSchema<PostgresGlobalState, Postgres
     }
 
     protected static List<PostgresStatisticsObject> getStatistics(SQLConnection con) throws SQLException {
-        List<PostgresStatisticsObject> statistics = new ArrayList<>();
-        try (Statement s = con.createStatement()) {
-            try (ResultSet rs = s.executeQuery("SELECT stxname FROM pg_statistic_ext ORDER BY stxname;")) {
-                while (rs.next()) {
-                    statistics.add(new PostgresStatisticsObject(rs.getString("stxname")));
-                }
-            }
-        }
-        return statistics;
+        // List<PostgresStatisticsObject> statistics = new ArrayList<>();
+        // try (Statement s = con.createStatement()) {
+        // try (ResultSet rs = s.executeQuery("SELECT stxname FROM pg_statistic_ext ORDER BY stxname;")) {
+        // while (rs.next()) {
+        // statistics.add(new PostgresStatisticsObject(rs.getString("stxname")));
+        // }
+        // }
+        // }
+        // return statistics;
+        return Collections.emptyList();
     }
 
     protected static PostgresTable.TableType getTableType(String tableTypeStr) throws AssertionError {

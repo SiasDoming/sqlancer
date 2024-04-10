@@ -167,6 +167,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
             validOptions.remove(BooleanExpression.POSIX_REGEX);
             validOptions.remove(BooleanExpression.BINARY_RANGE_COMPARISON);
         }
+        validOptions.remove(BooleanExpression.BINARY_RANGE_COMPARISON);
         BooleanExpression option = Randomly.fromList(validOptions);
         switch (option) {
         case POSTFIX_OPERATOR:
@@ -417,7 +418,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
 
     private PostgresExpression generateConcat(int depth) {
         PostgresExpression left = generateExpression(depth + 1, PostgresDataType.TEXT);
-        PostgresExpression right = generateExpression(depth + 1);
+        PostgresExpression right = generateExpression(depth + 1, PostgresDataType.TEXT);
         return new PostgresConcatOperation(left, right);
     }
 

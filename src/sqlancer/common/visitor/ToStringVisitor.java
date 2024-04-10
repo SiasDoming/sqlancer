@@ -12,9 +12,9 @@ public abstract class ToStringVisitor<T> extends NodeVisitor<T> {
         sb.append('(');
         sb.append('(');
         visit(op.getLeft());
-        sb.append(')');
+        sb.append(") ");
         sb.append(op.getOperatorRepresentation());
-        sb.append('(');
+        sb.append(" (");
         visit(op.getRight());
         sb.append(')');
         sb.append(')');

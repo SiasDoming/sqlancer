@@ -130,7 +130,7 @@ public abstract class PostgresConstant implements PostgresExpression {
         private final String value;
 
         public StringConstant(String value) {
-            this.value = value;
+            this.value = value.replace("\\", "");
         }
 
         @Override

@@ -98,6 +98,16 @@ public class PostgresAlterTableGenerator {
             // make it more likely that the ALTER TABLE succeeds
             action = Randomly.subset(Randomly.smallNumber(), Action.values());
         }
+        action.remove(Action.SET_LOGGED_UNLOGGED);
+        action.remove(Action.ALTER_COLUMN_SET_STATISTICS);
+        action.remove(Action.DISABLE_ROW_LEVEL_SECURITY);
+        action.remove(Action.ENABLE_ROW_LEVEL_SECURITY);
+        action.remove(Action.FORCE_ROW_LEVEL_SECURITY);
+        action.remove(Action.NO_FORCE_ROW_LEVEL_SECURITY);
+        action.remove(Action.CLUSTER_ON);
+        action.remove(Action.SET_WITHOUT_CLUSTER);
+        action.remove(Action.NOT_OF);
+        action.remove(Action.OWNER_TO);
         if (randomTable.getColumns().size() == 1) {
             action.remove(Action.ALTER_TABLE_DROP_COLUMN);
         }
@@ -135,9 +145,9 @@ public class PostgresAlterTableGenerator {
             switch (a) {
             case ALTER_TABLE_DROP_COLUMN:
                 sb.append("DROP ");
-                if (Randomly.getBoolean()) {
-                    sb.append(" IF EXISTS ");
-                }
+                // if (Randomly.getBoolean()) {
+                // sb.append(" IF EXISTS ");
+                // }
                 sb.append(randomTable.getRandomColumn().getName());
                 errors.add("because other objects depend on it");
                 if (Randomly.getBoolean()) {
@@ -272,13 +282,13 @@ public class PostgresAlterTableGenerator {
                 errors.add("violates foreign key constraint");
                 errors.add("unsupported ON COMMIT and foreign key combination");
                 errors.add("USING INDEX is not supported on partitioned tables");
-                if (Randomly.getBoolean()) {
-                    sb.append(" NOT VALID");
-                    errors.add("cannot be marked NOT VALID");
-                    errors.add("cannot add NOT VALID foreign key on partitioned table");
-                } else {
-                    errors.add("is violated by some row");
-                }
+                // if (Randomly.getBoolean()) {
+                // sb.append(" NOT VALID");
+                // errors.add("cannot be marked NOT VALID");
+                // errors.add("cannot add NOT VALID foreign key on partitioned table");
+                // } else {
+                errors.add("is violated by some row");
+                // }
                 break;
             case ADD_TABLE_CONSTRAINT_USING_INDEX:
                 sb.append("ADD ");

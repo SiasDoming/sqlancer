@@ -17,13 +17,13 @@ public final class PostgresAnalyzeGenerator {
         PostgresTable table = globalState.getSchema().getRandomTable();
         StringBuilder sb = new StringBuilder("ANALYZE");
         if (Randomly.getBoolean()) {
-            sb.append("(");
-            if (Randomly.getBoolean()) {
-                sb.append(" VERBOSE");
-            } else {
-                sb.append(" SKIP_LOCKED");
-            }
-            sb.append(")");
+            // sb.append("(");
+            // if (Randomly.getBoolean()) {
+            sb.append(" VERBOSE");
+            // } else {
+            // sb.append(" SKIP_LOCKED");
+            // }
+            // sb.append(")");
         }
         if (Randomly.getBoolean()) {
             sb.append(" ");

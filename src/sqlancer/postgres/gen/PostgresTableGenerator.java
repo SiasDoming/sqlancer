@@ -14,7 +14,7 @@ import sqlancer.postgres.PostgresSchema.PostgresColumn;
 import sqlancer.postgres.PostgresSchema.PostgresDataType;
 import sqlancer.postgres.PostgresSchema.PostgresTable;
 import sqlancer.postgres.PostgresVisitor;
-import sqlancer.postgres.ast.PostgresExpression;
+// import sqlancer.postgres.ast.PostgresExpression;
 
 public class PostgresTableGenerator {
 
@@ -23,7 +23,7 @@ public class PostgresTableGenerator {
     private boolean columnHasPrimaryKey;
     private final StringBuilder sb = new StringBuilder();
     private boolean isTemporaryTable;
-    private boolean isPartitionedTable;
+    // private boolean isPartitionedTable;
     private final PostgresSchema newSchema;
     private final List<PostgresColumn> columnsToBeAdded = new ArrayList<>();
     protected final ExpectedErrors errors = new ExpectedErrors();
@@ -71,8 +71,8 @@ public class PostgresTableGenerator {
             sb.append(" ");
             isTemporaryTable = true;
             sb.append(Randomly.fromOptions("TEMPORARY", "TEMP"));
-        } else if (Randomly.getBoolean()) {
-            sb.append(" UNLOGGED");
+            // } else if (Randomly.getBoolean()) {
+            // sb.append(" UNLOGGED");
         }
         sb.append(" TABLE");
         if (Randomly.getBoolean()) {
@@ -97,6 +97,7 @@ public class PostgresTableGenerator {
             String name = DBMSCommon.createColumnName(i);
             createColumn(name);
         }
+        sb.append(" ");
         if (Randomly.getBoolean()) {
             errors.add("constraints on temporary tables may reference only temporary tables");
             errors.add("constraints on unlogged tables may reference only permanent or unlogged tables");
@@ -111,8 +112,8 @@ public class PostgresTableGenerator {
         }
         sb.append(")");
         generateInherits();
-        generatePartitionBy();
-        generateUsing();
+        // generatePartitionBy();
+        // generateUsing();
         PostgresCommon.generateWith(sb, globalState, errors);
         if (Randomly.getBoolean() && isTemporaryTable) {
             sb.append(" ON COMMIT ");
@@ -127,8 +128,8 @@ public class PostgresTableGenerator {
         sb.append(newSchema.getRandomTable().getName());
         if (Randomly.getBoolean()) {
             for (int i = 0; i < Randomly.smallNumber(); i++) {
-                String option = Randomly.fromOptions("DEFAULTS", "CONSTRAINTS", "INDEXES", "STORAGE", "COMMENTS",
-                        "GENERATED", "IDENTITY", "STATISTICS", "STORAGE", "ALL");
+                String option = Randomly.fromOptions("DEFAULTS", "CONSTRAINTS");// , "INDEXES", "STORAGE", "COMMENTS",
+                // "GENERATED", "IDENTITY", "STATISTICS", "STORAGE", "ALL");
                 sb.append(" ");
                 sb.append(Randomly.fromOptions("INCLUDING", "EXCLUDING"));
                 sb.append(" ");
@@ -152,57 +153,57 @@ public class PostgresTableGenerator {
         }
     }
 
-    private void generatePartitionBy() {
-        if (Randomly.getBoolean()) {
-            isPartitionedTable = false;
-            return;
-        }
-        isPartitionedTable = true;
-        sb.append(" PARTITION BY ");
-        // TODO "RANGE",
-        String partitionOption = Randomly.fromOptions("RANGE", "LIST", "HASH");
-        sb.append(partitionOption);
-        sb.append("(");
-        errors.add("unrecognized parameter");
-        errors.add("cannot use constant expression");
-        errors.add("cannot add NO INHERIT constraint to partitioned table");
-        errors.add("unrecognized parameter");
-        errors.add("unsupported PRIMARY KEY constraint with partition key definition");
-        errors.add("which is part of the partition key.");
-        errors.add("unsupported UNIQUE constraint with partition key definition");
-        errors.add("does not accept data type");
-        int n = partitionOption.contentEquals("LIST") ? 1 : Randomly.smallNumber() + 1;
-        PostgresCommon.addCommonExpressionErrors(errors);
-        for (int i = 0; i < n; i++) {
-            if (i != 0) {
-                sb.append(", ");
-            }
-            sb.append("(");
-            PostgresExpression expr = PostgresExpressionGenerator.generateExpression(globalState, columnsToBeAdded);
-            sb.append(PostgresVisitor.asString(expr));
-            sb.append(")");
-            if (Randomly.getBoolean()) {
-                sb.append(globalState.getRandomOpclass());
-                errors.add("does not exist for access method");
-            }
-        }
-        sb.append(")");
-    }
+    // private void generatePartitionBy() {
+    // if (Randomly.getBoolean()) {
+    // isPartitionedTable = false;
+    // return;
+    // }
+    // isPartitionedTable = true;
+    // sb.append(" PARTITION BY ");
+    // // TODO "RANGE",
+    // String partitionOption = Randomly.fromOptions("RANGE", "LIST", "HASH");
+    // sb.append(partitionOption);
+    // sb.append("(");
+    // errors.add("unrecognized parameter");
+    // errors.add("cannot use constant expression");
+    // errors.add("cannot add NO INHERIT constraint to partitioned table");
+    // errors.add("unrecognized parameter");
+    // errors.add("unsupported PRIMARY KEY constraint with partition key definition");
+    // errors.add("which is part of the partition key.");
+    // errors.add("unsupported UNIQUE constraint with partition key definition");
+    // errors.add("does not accept data type");
+    // int n = partitionOption.contentEquals("LIST") ? 1 : Randomly.smallNumber() + 1;
+    // PostgresCommon.addCommonExpressionErrors(errors);
+    // for (int i = 0; i < n; i++) {
+    // if (i != 0) {
+    // sb.append(", ");
+    // }
+    // sb.append("(");
+    // PostgresExpression expr = PostgresExpressionGenerator.generateExpression(globalState, columnsToBeAdded);
+    // sb.append(PostgresVisitor.asString(expr));
+    // sb.append(")");
+    // if (Randomly.getBoolean()) {
+    // sb.append(globalState.getRandomOpclass());
+    // errors.add("does not exist for access method");
+    // }
+    // }
+    // sb.append(")");
+    // }
 
-    private void generateUsing() {
-        /*
-         * Postgres does not allow specifying USING clause for partitioned tables since they don't have any storage
-         * associated with them
-         */
-        if (isPartitionedTable) {
-            return;
-        }
-        if (Randomly.getBoolean()) {
-            return;
-        }
-        sb.append(" USING ");
-        sb.append(globalState.getRandomTableAccessMethod());
-    }
+    // private void generateUsing() {
+    // /*
+    // * Postgres does not allow specifying USING clause for partitioned tables since they don't have any storage
+    // * associated with them
+    // */
+    // if (isPartitionedTable) {
+    // return;
+    // }
+    // if (Randomly.getBoolean()) {
+    // return;
+    // }
+    // sb.append(" USING ");
+    // sb.append(globalState.getRandomTableAccessMethod());
+    // }
 
     private void generateInherits() {
         if (Randomly.getBoolean() && !newSchema.getDatabaseTables().isEmpty()) {
@@ -227,6 +228,10 @@ public class PostgresTableGenerator {
 
     private void createColumnConstraint(PostgresDataType type, boolean serial) {
         List<ColumnConstraint> constraintSubset = Randomly.nonEmptySubset(ColumnConstraint.values());
+        constraintSubset.remove(ColumnConstraint.GENERATED);
+        constraintSubset.remove(ColumnConstraint.UNIQUE);
+        constraintSubset.remove(ColumnConstraint.PRIMARY_KEY);
+
         if (Randomly.getBoolean()) {
             // make checks constraints less likely
             constraintSubset.remove(ColumnConstraint.CHECK);
@@ -277,9 +282,9 @@ public class PostgresTableGenerator {
                 sb.append(PostgresVisitor.asString(PostgresExpressionGenerator.generateExpression(globalState,
                         columnsToBeAdded, PostgresDataType.BOOLEAN)));
                 sb.append(")");
-                if (Randomly.getBoolean()) {
-                    sb.append(" NO INHERIT");
-                }
+                // if (Randomly.getBoolean()) {
+                // sb.append(" NO INHERIT");
+                // }
                 errors.add("out of range");
                 break;
             case GENERATED:

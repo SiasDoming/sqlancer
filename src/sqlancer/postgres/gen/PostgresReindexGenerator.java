@@ -32,9 +32,9 @@ public final class PostgresReindexGenerator {
         switch (scope) {
         case INDEX:
             sb.append("INDEX ");
-            if (Randomly.getBoolean()) {
-                sb.append("CONCURRENTLY ");
-            }
+            // if (Randomly.getBoolean()) {
+            // sb.append("CONCURRENTLY ");
+            // }
             List<PostgresIndex> indexes = globalState.getSchema().getRandomTable().getIndexes();
             if (indexes.isEmpty()) {
                 throw new IgnoreMeException();
@@ -43,16 +43,16 @@ public final class PostgresReindexGenerator {
             break;
         case TABLE:
             sb.append("TABLE ");
-            if (Randomly.getBoolean()) {
-                sb.append("CONCURRENTLY ");
-            }
+            // if (Randomly.getBoolean()) {
+            // sb.append("CONCURRENTLY ");
+            // }
             sb.append(globalState.getSchema().getRandomTable(t -> !t.isView()).getName());
             break;
         case DATABASE:
             sb.append("DATABASE ");
-            if (Randomly.getBoolean()) {
-                sb.append("CONCURRENTLY ");
-            }
+            // if (Randomly.getBoolean()) {
+            // sb.append("CONCURRENTLY ");
+            // }
             sb.append(globalState.getSchema().getDatabaseName());
             break;
         default:

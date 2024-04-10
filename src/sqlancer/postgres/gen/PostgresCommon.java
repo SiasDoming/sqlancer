@@ -1,10 +1,10 @@
 package sqlancer.postgres.gen;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+// import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Function;
+// import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -241,7 +241,9 @@ public final class PostgresCommon {
         case TEXT:
             if (Randomly.getBoolean()) {
                 sb.append("TEXT");
-            } else if (Randomly.getBoolean()) {
+                // } else if (Randomly.getBoolean()) {
+                // sb.append("name");
+            } else {
                 // TODO: support CHAR (without VAR)
                 if (PostgresProvider.generateOnlyKnown || Randomly.getBoolean()) {
                     sb.append("VAR");
@@ -250,15 +252,13 @@ public final class PostgresCommon {
                 sb.append("(");
                 sb.append(ThreadLocalRandom.current().nextInt(1, 500));
                 sb.append(")");
-            } else {
-                sb.append("name");
             }
-            if (Randomly.getBoolean() && !PostgresProvider.generateOnlyKnown) {
-                sb.append(" COLLATE ");
-                sb.append('"');
-                sb.append(Randomly.fromList(opClasses));
-                sb.append('"');
-            }
+            // if (Randomly.getBoolean() && !PostgresProvider.generateOnlyKnown) {
+            // sb.append(" COLLATE ");
+            // sb.append('"');
+            // sb.append(Randomly.fromList(opClasses));
+            // sb.append('"');
+            // }
             break;
         case DECIMAL:
             sb.append("DECIMAL");
@@ -297,67 +297,74 @@ public final class PostgresCommon {
         CHECK, UNIQUE, PRIMARY_KEY, FOREIGN_KEY, EXCLUDE
     }
 
-    private enum StorageParameters {
-        FILLFACTOR("fillfactor", (r) -> r.getInteger(10, 100)),
-        // toast_tuple_target
-        PARALLEL_WORKERS("parallel_workers", (r) -> r.getInteger(0, 1024)),
-        AUTOVACUUM_ENABLED("autovacuum_enabled", (r) -> Randomly.fromOptions(0, 1)),
-        AUTOVACUUM_VACUUM_THRESHOLD("autovacuum_vacuum_threshold", (r) -> r.getInteger(0, 2147483647)),
-        OIDS("oids", (r) -> Randomly.fromOptions(0, 1)),
-        AUTOVACUUM_VACUUM_SCALE_FACTOR("autovacuum_vacuum_scale_factor",
-                (r) -> Randomly.fromOptions(0, 0.00001, 0.01, 0.1, 0.2, 0.5, 0.8, 0.9, 1)),
-        AUTOVACUUM_ANALYZE_THRESHOLD("autovacuum_analyze_threshold", (r) -> r.getLong(0, Integer.MAX_VALUE)),
-        AUTOVACUUM_ANALYZE_SCALE_FACTOR("autovacuum_analyze_scale_factor",
-                (r) -> Randomly.fromOptions(0, 0.00001, 0.01, 0.1, 0.2, 0.5, 0.8, 0.9, 1)),
-        AUTOVACUUM_VACUUM_COST_DELAY("autovacuum_vacuum_cost_delay", (r) -> r.getLong(0, 100)),
-        AUTOVACUUM_VACUUM_COST_LIMIT("autovacuum_vacuum_cost_limit", (r) -> r.getLong(1, 10000)),
-        AUTOVACUUM_FREEZE_MIN_AGE("autovacuum_freeze_min_age", (r) -> r.getLong(0, 1000000000)),
-        AUTOVACUUM_FREEZE_MAX_AGE("autovacuum_freeze_max_age", (r) -> r.getLong(100000, 2000000000)),
-        AUTOVACUUM_FREEZE_TABLE_AGE("autovacuum_freeze_table_age", (r) -> r.getLong(0, 2000000000));
-        // TODO
+    // private enum StorageParameters {
+    // FILLFACTOR("fillfactor", (r) -> r.getInteger(10, 100)),
+    // // toast_tuple_target
+    // PARALLEL_WORKERS("parallel_workers", (r) -> r.getInteger(0, 1024)),
+    // AUTOVACUUM_ENABLED("autovacuum_enabled", (r) -> Randomly.fromOptions(0, 1)),
+    // AUTOVACUUM_VACUUM_THRESHOLD("autovacuum_vacuum_threshold", (r) -> r.getInteger(0, 2147483647)),
+    // OIDS("oids", (r) -> Randomly.fromOptions(0, 1)),
+    // AUTOVACUUM_VACUUM_SCALE_FACTOR("autovacuum_vacuum_scale_factor",
+    // (r) -> Randomly.fromOptions(0, 0.00001, 0.01, 0.1, 0.2, 0.5, 0.8, 0.9, 1)),
+    // AUTOVACUUM_ANALYZE_THRESHOLD("autovacuum_analyze_threshold", (r) -> r.getLong(0, Integer.MAX_VALUE)),
+    // AUTOVACUUM_ANALYZE_SCALE_FACTOR("autovacuum_analyze_scale_factor",
+    // (r) -> Randomly.fromOptions(0, 0.00001, 0.01, 0.1, 0.2, 0.5, 0.8, 0.9, 1)),
+    // AUTOVACUUM_VACUUM_COST_DELAY("autovacuum_vacuum_cost_delay", (r) -> r.getLong(0, 100)),
+    // AUTOVACUUM_VACUUM_COST_LIMIT("autovacuum_vacuum_cost_limit", (r) -> r.getLong(1, 10000)),
+    // AUTOVACUUM_FREEZE_MIN_AGE("autovacuum_freeze_min_age", (r) -> r.getLong(0, 1000000000)),
+    // AUTOVACUUM_FREEZE_MAX_AGE("autovacuum_freeze_max_age", (r) -> r.getLong(100000, 2000000000)),
+    // AUTOVACUUM_FREEZE_TABLE_AGE("autovacuum_freeze_table_age", (r) -> r.getLong(0, 2000000000));
+    // // TODO
 
-        private String parameter;
-        private Function<Randomly, Object> op;
+    // private String parameter;
+    // private Function<Randomly, Object> op;
 
-        StorageParameters(String parameter, Function<Randomly, Object> op) {
-            this.parameter = parameter;
-            this.op = op;
-        }
-    }
+    // StorageParameters(String parameter, Function<Randomly, Object> op) {
+    // this.parameter = parameter;
+    // this.op = op;
+    // }
+    // }
 
     public static void generateWith(StringBuilder sb, PostgresGlobalState globalState, ExpectedErrors errors) {
-        if (Randomly.getBoolean()) {
-            sb.append(" WITH (");
-            ArrayList<StorageParameters> values = new ArrayList<>(Arrays.asList(StorageParameters.values()));
-            values.remove(StorageParameters.OIDS);
-            errors.add("unrecognized parameter");
-            errors.add("ALTER TABLE / ADD CONSTRAINT USING INDEX is not supported on partitioned tables");
-            List<StorageParameters> subset = Randomly.nonEmptySubset(values);
-            int i = 0;
-            for (StorageParameters parameter : subset) {
-                if (i++ != 0) {
-                    sb.append(", ");
-                }
-                sb.append(parameter.parameter);
-                sb.append("=");
-                sb.append(parameter.op.apply(globalState.getRandomly()));
-            }
-            sb.append(")");
-        }
+        // if (Randomly.getBoolean()) {
+        // sb.append(" WITH (");
+        // ArrayList<StorageParameters> values = new ArrayList<>(Arrays.asList(StorageParameters.values()));
+        // values.remove(StorageParameters.OIDS);
+        // errors.add("unrecognized parameter");
+        // errors.add("ALTER TABLE / ADD CONSTRAINT USING INDEX is not supported on partitioned tables");
+        // List<StorageParameters> subset = Randomly.nonEmptySubset(values);
+        // int i = 0;
+        // for (StorageParameters parameter : subset) {
+        // if (i++ != 0) {
+        // sb.append(", ");
+        // }
+        // sb.append(parameter.parameter);
+        // sb.append("=");
+        // sb.append(parameter.op.apply(globalState.getRandomly()));
+        // }
+        // sb.append(")");
+        // }
     }
 
     public static void addTableConstraints(boolean excludePrimaryKey, StringBuilder sb, PostgresTable table,
             PostgresGlobalState globalState, ExpectedErrors errors) {
         // TODO constraint name
         List<TableConstraints> tableConstraints = Randomly.nonEmptySubset(TableConstraints.values());
+        tableConstraints.remove(TableConstraints.UNIQUE);
+        tableConstraints.remove(TableConstraints.PRIMARY_KEY);
+        tableConstraints.remove(TableConstraints.FOREIGN_KEY);
+        tableConstraints.remove(TableConstraints.EXCLUDE);
         if (excludePrimaryKey) {
             tableConstraints.remove(TableConstraints.PRIMARY_KEY);
         }
         if (globalState.getSchema().getDatabaseTables().isEmpty()) {
             tableConstraints.remove(TableConstraints.FOREIGN_KEY);
         }
+        int i = 0;
         for (TableConstraints t : tableConstraints) {
-            sb.append(", ");
+            if (i++ > 0) {
+                sb.append(", ");
+            }
             // TODO add index parameters
             addTableConstraint(sb, table, globalState, t, errors);
         }
